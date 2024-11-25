@@ -7,7 +7,8 @@ const chapter = require('../models/chapter')
 router.post('/create', async (req, res) => {
     try {
       let notebook_name = req.body.name;
-      const newnotebook = new NoteBook({ "name": notebook_name });
+      let user = req.body.user;
+      const newnotebook = new NoteBook({ "name": notebook_name,"user":user });
       await newnotebook.save();
       res.json({ message: 'Notebook created successfully', name: notebook_name });
     } catch (error) {
@@ -18,8 +19,10 @@ router.post('/create', async (req, res) => {
   
 
 router.get('/',async(req,res)=>{
+  let user = req.headers.user;
     try {
-        let temp = await NoteBook.find({})
+        let temp = await NoteBook.find({"user":user})
+        console.log(temp)
         res.status(200).send(temp)
     } catch (error) {
         console.log(error)
